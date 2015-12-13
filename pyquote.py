@@ -10,7 +10,7 @@ from unidecode import unidecode
 from PIL import ImageFont, Image, ImageDraw, ImageOps
 from image_utils import ImageText
 import traceback
-
+import argparse
 
 
 class Google:
@@ -128,11 +128,14 @@ def add_quote(infile,text):
 
 
 def main():
-    if len(sys.argv) <1:
-        print 'needs keyword as argument'
-        sys.exit(0)
-
-    keyword=sys.argv[1]
+    parser=argparse.ArgumentParser(description="Generates quotation memes from keywords",)
+    parser.add_argument('keyword',help='the keyword to search quotes with')
+    parser.add_argument('-t','--total',help='''total images.''',type=int)
+    args=parser.parse_args()
+ 
+    keyword = args.keyword
+    # if args.total:
+    #     total=args.total
     directory='output/{}'.format(keyword)
     if not os.path.exists(directory):
         os.makedirs(directory)
@@ -151,6 +154,8 @@ def main():
                 traceback.print_exc()
                 continue
         
+            if args.total and qno>=args.total:
+                break
 
 
 if __name__ == '__main__':
