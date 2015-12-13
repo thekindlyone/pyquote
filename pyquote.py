@@ -10,15 +10,16 @@ from unidecode import unidecode
 from PIL import ImageFont, Image, ImageDraw, ImageOps
 from image_utils import ImageText
 import traceback
+
+
+
 class Google:
     def __init__(self):        
         self.browser=Browser()
         self.url = "http://images.google.com/"
 
-
     def __enter__(self):
         return self
-
 
     def search(self,keyword):
         self.browser.visit(self.url)
@@ -62,16 +63,16 @@ def fetchquotes(keyword):
 
 
 
-def download_image(name,url):
+def download_image(name,url,directory):
     try:
         ext=url.rsplit('.')[-1][:3]
     except:
         ext='png'
     c=1
-    fname='output/{}.{}'.format(name,ext)
+    fname='{}/{}.{}'.format(directory,name,ext)
     while os.path.exists(fname):
         c+=1
-        fname='output/{}.{}'.format(name+str(c),ext)
+        fname='{}/{}.{}'.format(directory,name+str(c),ext)
         # name+=str(c)
         print 'Downloading Image'
     r=requests.get(url)
@@ -132,6 +133,9 @@ def main():
         sys.exit(0)
 
     keyword=sys.argv[1]
+    directory='output/{}'.format(keyword)
+    if not os.path.exists(directory):
+        os.makedirs(directory)
     with Google() as google:
         for qno,(author,quote) in enumerate(fetchquotes(keyword),start=1):
             print 'Fetched quote no.{} by {}'.format(qno,author) 
@@ -140,7 +144,7 @@ def main():
                 if not img:
                     continue
 
-                fname = download_image(author, img)
+                fname = download_image(author, img, directory)
                 add_quote(fname, quote)
                 print fname,'written\n****************************\n\n'
             except Exception as e:
