@@ -71,7 +71,7 @@ def main():
     parser=argparse.ArgumentParser(description="Generates quotation memes from keywords",)
     parser.add_argument('keyword',help='the keyword to search quotes with')
     parser.add_argument('-t','--total',help='''total images.''',type=int)
-    parser.add_argument('-s','--source',help='''bq for Brainyquote, gr for Goodreads''',type=str,default='gr')
+    parser.add_argument('-s','--source',help='''bq for Brainyquote, gr for Goodreads(default)''',type=str,default='gr')
     parser.add_argument('-f','--firefox',help='''use firefox, by default uses phantomjs''',action='store_true')
     args=parser.parse_args()
     pool = Pool(5)
